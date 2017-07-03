@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vue-image</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="js/vue.js"></script>
+<style type="text/css">
+
+#v1{
+	margin: 0 auto;width: 100%;
+}
+.input{
+	border: 1px solid #ddd; border-radius: 4px; -webkit-transition: 0.3s; -moz-transition: 0.3s; transition: 0.3s; 
+	padding: 10px 15px;
+}
+.input:focus{
+	border-color: #189cfb;box-shadow: 0 0 6px #189cfb;
+}
+ul li{
+	padding: 10px;
+}
+.fxmiddle label{
+	width: 60px;
+}
+.button{
+	width: 90px;height: 32px;border: 1px solid #ddd;
+}
+.button:active{
+	border-color: #189cfb;background: #189cfb;color: #fff;
+}
+table{
+	/*width: 100%;*/
+}
+table td{
+	padding: 8px 15px;
+}
+</style>
+</head>
+<link rel="stylesheet" href="css/style.css">
+<body>
+<div id="v1">
+	<ul>
+		<li class="flex fxmiddle"><label>width：</label><input class="input" type="search" v-model.munber="width"></li>
+		<li class="flex fxmiddle"><label>height：</label><input class="input" type="search" v-model.munber="height"></li>
+		<li class="flex fxmiddle"><label>size：</label><input class="input" type="search" v-model.munber="size"></li>
+		<li class="flex fxmiddle"><label>ppi：</label><input class="input" type="text" readonly="true" v-model="total"></li>
+		<li class="flex fxmiddle">
+			<button class="button" v-on:click="save">save</button>
+		</li>
+	</ul>
+	<table>
+		<tr>
+			<td>index</td><td>width</td><td>height</td><td>size</td><td>ppi</td>
+		</tr>
+		<tr v-for="(item, index) in items">
+			<td>{{index}}</td><td>{{item.width}}</td><td>{{item.height}}</td><td>{{item.size}}</td><td>{{item.ppi}}</td>
+		</tr>
+	</table>
+</div>
+
+
+<script type="text/javascript">
+
+new Vue({
+	el:'#v1',
+	data:{
+		width:'1',
+		height:'1',
+		size:'14',
+		ppi:'',
+		items:[]
+	},
+	methods:{
+		save:function(){
+			var that=this;
+			var temoObj={width:that.width,height:that.height,size:that.size,ppi:that.total}
+			that.items.push(temoObj);
+			localStorage.setItem('tempPPIData',JSON.stringify(that.items))
+		}
+	},
+	computed:{
+		total:function(){
+			var w=this.width,h=this.height;
+			var p=w*w+h*h;
+			return (Math.sqrt(p)/this.size).toFixed(2)
+		}
+	},
+	mounted:function(){
+		var items=localStorage.getItem('tempPPIData')||'[]';
+		this.items=JSON.parse(items);
+	}
+})
+
+</script>
+</body>
+</html>

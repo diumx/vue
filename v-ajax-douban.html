@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ajax</title>
+</head>
+<body>
+<div class="vuebox">
+	<p>{{get}}</p>
+	<p>{{post}}</p>
+</div>
+<script src="js/vue.js"></script>
+<script src="js/tools.js"></script>
+<script>
+var v1=new Vue({
+	el:'.vuebox',
+	data:{
+		get:'',
+		post:''
+	},
+	methods:{
+
+	},
+	mounted:function(){
+		var p={},ps="v2/book/search";
+		p.tag='热门';
+		xhr.get(ps, p, function(r){
+			
+		})
+
+	}
+})
+this.active = item.name;
+for(var i=0; i<this.items.length;i++){
+	this.items[i].active = false;
+}
+item.active = true;
+</script>
+</body>
+</html>

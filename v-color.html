@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Color - Picker</title>
+</head>
+<body>
+<canvas id="MyCanvas"></canvas>
+<script type="text/javascript">
+(function(){  
+	var c=document.getElementById("MyCanvas"),  
+	ctx=c.getContext("2d"),  
+	image=new Image();  
+	image.src="http://112.65.132.238:8080/merchantapi/upload/course/183b90d3e6d4460b94948b40c6461e4a_201704011532171.jpg";  
+	image.onload=function(){  
+		ctx.drawImage(this,0,0);  
+	}
+	c.onclick=function(e){  
+		var x=e.clientX,y=e.clientY,x1=this.offsetLeft,y1=this.offsetTop,nowx=x-x1,nowy=y-y1;  
+		var imagedates=ctx.getImageData(nowx,nowy,1,1);  
+		var pixel=imagedates.data;  
+		document.getElementById("color").style["background-color"]="rgb("+pixel[0]+","+pixel[1]+","+pixel[2]+")";  
+	}
+})() 
+</script>
+</body>
+</html>

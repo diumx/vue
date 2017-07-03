@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ajax</title>
+</head>
+<body>
+<div class="vuebox">
+	<p>{{get}}</p>
+	<p>{{post}}</p>
+</div>
+<script src="js/vue.js"></script>
+<script src="js/tools.js"></script>
+<script>
+var v1=new Vue({
+	el:'.vuebox',
+	data:{
+		get:'',
+		post:''
+	},
+	methods:{
+
+	},
+	mounted:function(){
+		var p={},ps="Stadium/GetStadiumDistrict";
+		p.districtname='上海市';
+		p.districttype="Area";
+		p.token='';
+		xhr.get(ps, p, function(r){
+			v1.get=r
+		})
+
+		var p={},ps="Training/GetCourse";
+		p.CourseId='410';
+		xhr.post(ps, p, function(r){
+			v1.post=r
+		});
+	}
+})
+
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vue</title>
+<script type="text/javascript" src="js/vue.js"></script>
+</head>
+<body>
+<div id="v1">
+	<p>This is {{name}}, today is {{day}}, {{weather}}.</p>
+	<button v-on:click="forbid" v-bind:class="classList">{{type}}</button>
+</div>
+
+<ul class="top_bar">
+    <li class="top_cell"
+        v-for="cell in 5"
+        :class="{ 'active': cell === selected }" 
+        @click="choose(cell)" 
+		:data="cell"
+        >
+        {{cell}}
+    </li>
+</ul>
+
+
+<script type="text/javascript">
+var v1=new Vue({
+	el:'#v1',
+	data:{
+		name:'Lily',
+		day:new Date().getDay(),
+		weather:'sunny',
+		type:'sure',
+		disabled:'',
+		classList:'button grebtn'
+	},
+	methods:{
+		forbid:function(){
+			console.log(1);
+			// var that=this;
+			this.classList="noneit"
+		}
+	}
+})
+
+var v2=new Vue({
+	el:'.top_bar',
+	data:{
+		selected: null
+	},
+	methods:{
+		choose:function (index, obj) {
+			this.selected = index
+			console.log(index,obj)
+		}
+	}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>vue-for</title>
+<link rel="stylesheet" type="text/css" href="../css/style.css">
+<style type="text/css">
+.avtor{
+	width: 20px;height: 20px;
+}
+#v1 .ul li{
+	height: 20px;
+}
+</style>
+</head>
+<body>
+<div id="v1" class="pad10">
+	<div class="flex padtb10">
+		<label>name</label>
+		<input type="text" class="input" v-model.trim="newSt.name" @keyup.13="submit">
+	</div>
+	<div class="flex padtb10">
+		<label>age</label>
+		<select name="" id="" v-model="newSt.age" value="newSt.age">
+			<option :value="item" v-for="item in 5">{{item}}</option>
+		</select>
+	</div>
+	<div class="flex padtb10">
+		<label>sex</label>
+		<div>
+			<input name="age" type="radio" value="1" v-model="newSt.sex" id="male"><label for="male">1</label>
+			<input name="age" type="radio" value="0" v-model="newSt.sex" id="female"><label for="female">0</label>
+		</div>
+	</div>
+	<div class="flex padtb10">
+		<button @click="submit">submit</button>
+	</div>
+	<ul class="ul">
+		<li class="pad10 fxmiddle flex"><div>序号</div><div>头像</div><div>名字</div><div>年龄</div></li>
+		<!-- <template><li></li></template> 用来包裹，不直接显示在页面 -->
+		<li-todo v-for="(item,index) in students" :name="item.name" :sex="item.sex" :idx="index" :age="item.age"></li-todo>
+	</ul>
+	<div v-text="'plus-:'+plus"></div>
+</div>
+</body>
+<script type="text/javascript" src="../js/vue.js"></script>
+<script type="text/javascript">
+Vue.component('li-todo',{
+	template:'<li class="pad10 fxmiddle flex">\
+	<div>{{idx}}</div>  <img class="avtor padlr10" :src="sex|imgSrc"><div>{{name}}</div><div class="padlr10">{{age}}</div>\
+	</li>',
+	props:['name','sex','age','idx'],
+	filters:{
+		imgSrc:function(val){
+			return val==1?'../imgs/icon-5.png':'../imgs/icon-1.png';
+		}
+	}
+})
+var a1=new Vue({
+	el:'#v1',
+	methods:{
+		submit:function(){
+			var newSt=this.newSt;
+			if(this.newSt.name){
+				this.students.push(newSt);
+				this.newSt={name:'',age:'1',sex:1}
+			}
+		}
+	},
+	data:{
+		students:[
+			{name:'lili',age: 12,sex:0},{name:'nana',age: 14,sex:1},{name:'kiki',age: 12,sex:0},{name:'gigi',age: 18,sex:1},
+		],
+		newSt:{
+			name:'',age:'1',sex:1
+		},
+		a:100,
+		b:12
+
+	},
+	watch:{
+		students:function(val){
+			console.log(JSON.stringify(val))
+		}
+	},
+	computed:{
+		plus:function(){
+			return this.a+this.b
+		}
+	}
+})
+/*push*/
+/*
+	push：添加到最后一个，
+	shift：删除第一个，
+	unshift：在第一个之前添加一个，
+	pop：删除最后一个，
+	slice：选定数组，slice(1,4),选定1，2，3，4，不修改数组
+	splice：删除并填入，solice(1,0,'lili')，在1后删除0个（不删除），添加lili，修改数组
+
+*/
+/*
+	see:字面量语法 vs 动态语法
+*/
+</script>
+</html>

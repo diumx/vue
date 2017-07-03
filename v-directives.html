@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vue-directives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+<script type="text/javascript" src="js/vue.js"></script>
+<style type="text/css">
+.input{
+	border: 1px solid #ddd;padding: 8px 15px;border-radius: 4px;
+}
+</style>
+</head>
+<link rel="stylesheet" href="css/style.css">
+<body>
+<div id="v1">
+	<input type="text" v-focus="focusStatus" v-model="word" class="input" v-on:focus="focusStatus=true" v-on:blur="focusStatus=false">
+	<button @click="focusit">focus</button>
+</div>
+
+
+<script type="text/javascript">
+new Vue({
+	el:'#v1',
+	data:{
+		word:'23',
+		focusStatus:false
+	},
+	methods:{
+		focusit:function(){
+			this.focusStatus=true
+		}
+	},
+	directives:{
+		focus:{
+			inserted:function(el,{value}){
+				console.log(el,value)
+				el.focus()
+			}
+		}
+	},
+	watch:{
+		focusStatus:function(val){
+			console.log(val)
+		}
+	}
+})
+</script>
+</body>
+</html>

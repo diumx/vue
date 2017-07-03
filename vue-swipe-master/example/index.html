@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui, maximum-scale=1.0, minimum-scale=1.0">
+  <title>vue-swipe examples</title>
+  <link rel="stylesheet" href="../dist/vue-swipe.css" charset="utf-8">
+  <style>
+    .my-swipe {
+      height: 200px;
+      color: #fff;
+      font-size: 30px;
+      text-align: center;
+    }
+    .slide1 {
+      background-color: #0089dc;
+      color: #fff;
+    }
+    .slide2 {
+      background-color: #ffd705;
+      color: #000;
+    }
+    .slide3 {
+      background-color: #ff2d4b;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <swipe class="my-swipe" :auto="5000" :show-indicators="true" :index="1" v-on:slide-change-start="onSlideChangeStart">
+      <swipe-item class="slide1"><img src="jingan-1.jpg"></swipe-item>
+      <swipe-item class="slide2">Slide2</swipe-item>
+      <swipe-item class="slide3">Slide3</swipe-item>
+    </swipe>
+
+  <script src="../dist/vue.js"></script>
+  <script src="../dist/vue-swipe.js"></script>
+  <!-- <script type="text/javascript" src="/example/dist/example.js"></script> -->
+</body>
+<script type="text/javascript">
+const vueSwipe = VueSwipe.Swipe;
+const vueSwipeItem = VueSwipe.SwipeItem;
+
+new Vue({
+    el: '#container',
+    components: {
+    'swipe': vueSwipe,
+    'swipe-item': vueSwipeItem
+  },
+    methods: {
+        onSlideChangeStart:function(currentPage) {
+            console.log('onSlideChangeStart', currentPage);
+        },
+        onSlideChangeEnd:function(currentPage) {
+            console.log('onSlideChangeEnd', currentPage);
+        }
+    }
+});
+
+</script>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vue-image</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+<script type="text/javascript" src="js/vue.js"></script>
+<script type="text/javascript" src="js/vue-resource.min.js"></script>
+<script type="text/javascript" src="js/template.js"></script>
+<style type="text/css">
+*{
+	margin: 0;padding: 0;
+}
+ul,li{
+	list-style: none;
+}
+#v1{
+	margin: 0 auto;width: 100%;max-width: 1000px;
+}
+img{
+	display: block;width: 100%;-webkit-filter: blur(10px);opacity: 0;
+}
+html,body{
+	width: 100%;height: 100%;
+}
+</style>
+</head>
+<link rel="stylesheet" href="css/style.css">
+<body>
+<div id="v1">
+	<input type="text" v-model="inpTxt">
+	<text-el v-bind:message="inpTxt"></text-el>
+
+	<div v-text="inpTxt"></div>
+	<input-el v-bind:message="inpTxt"></input-el>
+
+	<ul>
+		<li v-for="img in results" @click="prew">
+			<img v-bind:src="img.url">
+		</li>
+	</ul>
+	<!-- <div :class="['cfmbox',hideCfm?'noneit':'']" @click="sure">
+		<div class="confirm" @click.stop="prevent">
+			<div class="content">
+				确定？
+			</div>
+			<div class="btnbox">
+				<button class="cancel" @click="sure">取消</button>
+				<button class="sure" @click="sure(true)">确定</button>
+			</div>
+		</div>
+	</div> -->
+	<modal v-on:sure="imSure"></modal>
+</div>
+
+
+<script type="text/javascript">
+function ajaxRequest(url, para, success, options){
+	var url='http://gank.io/api/data/%E7%A6%8F%E5%88%A9/10/'+url;
+	var option={
+		method:para.method||'get',
+		params:para||{},
+		timeout:8000,
+
+	}
+	Vue.http.get(url, option).then(function(r){
+		var data=r.data;
+		success(data)
+	}, function(r){
+		console.log('err:'+r)
+	});
+};
+Vue.component('text-el',{
+	template:'<div v-text="message"></div>',
+	props:['message'],
+	
+})
+Vue.component('input-el',{
+	template:'<input type="text" v-bind:message="message">',
+	props:['message'],
+	data:function(){
+		return {
+			message:''
+		}
+	}
+})
+var v1=new Vue({
+	el:'#v1',
+	data:{
+		results:[],
+		page:1,
+		flag:true,
+		hideCfm:true,
+		inpTxt:'123'
+	},
+	mounted:function(){
+		this.getImgs();
+		this.scroll();
+	},
+	methods:{
+		getImgs:function(){
+			this.flag=false;
+			var that=this;
+			ajaxRequest(that.page,{},function(r){
+				that.results=that.results.concat(r.results);
+				that.flag=true;
+			})
+		},
+		scroll:function(){
+			var that=this;
+			window.onscroll=function(e){
+				var bottom=document.querySelector("#v1").offsetHeight-document.querySelector("body").scrollTop-50<=document.querySelector("body").offsetHeight
+				if(bottom&&that.flag){
+					that.page++;
+					that.getImgs();
+				}
+			}
+		},
+		prew:function(){
+			console.log(1)
+			this.hideCfm=false
+		},
+		imSure:function(){
+			console.log(1233)
+		},
+		// sure:function(obj,fn){
+		// 	if(obj===true){
+		// 		console.log('sure',fn)
+		// 	}else{
+		// 		console.log('cancel')
+		// 	}
+		// 	this.hideCfm=true
+		// },
+
+	}
+})
+
+</script>
+</body>
+</html>

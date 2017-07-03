@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+</head>
+<body>
+<script type="text/javascript">
+
+var arr=[
+	{
+		checked:true, name:1
+	},
+	{
+		checked:false, name:2
+	},
+	{
+		checked:false, name:3
+	},
+	{
+		checked:true, name:4
+	},
+]	
+for(var i=0;i<arr.length;i++){
+	// console.log(JSON.stringify(arr))
+	// console.log('---------')
+	if(arr[i].checked){
+		// console.log(arr[i].name)
+		arr.splice(i,1)
+	}
+}
+// console.log(arr)
+
+
+var arr2=[
+	{
+		name:1,
+		list:[
+			{
+				name:11,checked:true
+			},
+			{
+				name:12,checked:true
+			},
+		]
+	},
+	{
+		name:2,
+		list:[
+			{
+				name:21,checked:true
+			},
+			{
+				name:22,checked:true
+			},
+		]
+	}
+]
+for(var i=0;i<arr2.length;i++){
+	var list=arr2[i].list;
+
+	for(var n=0;n<list.length;n++){
+		var ln=list[n];
+
+		if(ln.checked){
+			list.splice(n,1)
+			console.log('---------')
+		}
+	}
+	
+	console.log(JSON.stringify(list))
+}
+console.log(JSON.stringify(arr2))
+</script>
+</body>
+</html>

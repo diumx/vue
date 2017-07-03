@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>招行跑</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+<script type="text/javascript" src="../js/vue.js"></script>
+<script type="text/javascript" src="../js/tools.js"></script>
+<style type="text/css">
+#swiper{
+	visibility: visible;overflow: hidden;position: relative;
+}
+#swiper .swpul{
+	overflow: hidden;position: relative;display: -webkit-flex;height: 200px;
+	width: 1125px;
+}
+#swiper .swpul .swpli{
+	height: 100%;
+	width: 375px;
+	font-size: 20px;line-height: 200px;color: #fff;text-align: center;
+	overflow: auto;
+}
+.transition4{
+	transition: 0.4s;
+}
+.bgred{
+	background: red;
+}
+.bggreen{
+	background: green;
+}
+.bgblue{
+	background: blue;
+}
+</style>
+</head>
+<link rel="stylesheet" href="../css/style.css">
+<body class="bgcmbgrey">
+<div id="main" class="max700">
+	<div id="swiper">
+		<ul v-bind:class="['swpul',{'transition4':touchstop}]" v-on:touchstart="touchstart" v-on:touchmove="touchmove" v-on:touchend="touchend" v-bind:data="moveX" v-bind:style="{'transform':'translateX('+moveX+'px)'}">
+			<li class="swpli bgred" style="height: 100%;">
+				<div style="height: 300px;">dasd</div>
+			</li>
+			<li class="swpli bggreen" style="height: 100%;">
+				2
+			</li>
+			<li class="swpli bgblue" style="height: 100%;">
+				3
+			</li>
+		</ul>
+	</div>
+	<p>{{moveX}},{{index}}</p>
+</div>
+
+<script type="text/javascript">
+new Vue({
+	el:'#main',
+	data:{
+		phone:'',
+		psw:'',
+		time:0,
+		loading:false,
+		menu:[false,true,false],
+		actives:[
+			{'name':'400米男子自由泳'},{'name':'400米男子蛙泳'},{'name':'400米男子自由泳'},{'name':'400米男子自由泳'}
+		],
+		pminfo:[
+			{'name':'400米男子自由泳','px':12,'time':'00:02:10'},{'name':'400米男子蛙泳','px':12,'time':'00:02:10'},{'name':'400米男子自由泳','px':12,'time':'00:02:10'}
+		],
+		sClientX:0,
+		sClientY:0,
+		moveX:0,
+		touchstop:false,
+		index:0,
+		thisM:0,
+		scY:true
+	},
+	methods:{
+		touchstart:function(e){
+			var touche=e.touches[0];
+			this.scY=false
+			this.sClientX=touche.clientX;
+			this.sClientY=touche.clientY;
+			this.touchstop=false;
+		},
+		touchmove:function(e){
+			var touche=e.touches[0];
+			this.thisM=touche.clientX-this.sClientX;
+			var y=touche.clientY-this.sClientY;
+			if(Math.abs(this.thisM)>=5&&!this.scY){
+				e.preventDefault();
+				this.moveX=this.thisM+(-375*this.index)
+			}
+			if(Math.abs(y)>=5){
+				this.thisM=0
+				this.scY=true;
+			}
+			
+		},
+		touchend:function(){
+			/*
+			0~-375
+			-375~-
+			0-750*/
+			this.touchstop=true;
+
+			if(this.thisM<0){
+				if(this.index==2){this.index=2}else{this.index++}
+				
+			}
+			if(this.thisM>0&&this.index<=2){
+				if(this.index==0){this.index=0}else{this.index--}
+				
+			}
+			// var a=Math.abs(this.thisM)
+			this.moveX=-375*this.index
+		}
+	},
+	watch:{
+		index:function(val){
+			console.log(val)
+		}
+	}
+})
+</script>
+</body>
+</html>

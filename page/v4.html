@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vue</title>
+<script type="text/javascript" src="js/vue.js"></script>
+<style type="text/css">
+.red{
+	color: #f00;
+}
+.green{
+	color: #0f0;
+}
+</style>
+</head>
+<body>
+<div id="v1">
+	<ol>
+		<li-item v-for="(vs,index) in lis" v-bind:todo="vs" v-bind:class="index"></li-item>
+	</ol>
+	<button v-on:click="change"  v-text="'todo '+count"></button>
+	<p v-html="part"></p>
+</div>
+
+
+<script type="text/javascript">
+Vue.component('li-item',{
+	props:['todo','cls'],
+	template:'<li v-bind:class="cls"><span>{{todo.name}}</span> eat <span>{{todo.food}}</span>!</li>'
+});
+var v1=new Vue({
+	el:'#v1',
+	data:{
+		lis:[
+			{name:'lili',food:'apple'},{name:'micale',food:'bannan'},{name:'cissy',food:'egg'}
+		],
+		count:1,
+		green:'green',
+		part:'<span v-bind:class="'+this.green+'">count</span>'
+		
+	},
+	methods:{
+		change:function(){
+			this.count++;
+		}
+	},
+	watch:{
+		count:function(val,oldval){
+			console.log('change! old value is '+oldval+', new value is '+val+' !');
+		}
+	}
+})
+</script>
+</body>
+</html>

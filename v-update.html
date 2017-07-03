@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vue-folder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+<script type="text/javascript" src="js/vue.js"></script>
+<style type="text/css">
+
+.msg-box{
+	display: none;
+}
+.show{
+	display: block;
+}
+</style>
+</head>
+<body>
+<div id="v1">
+	<alert v-bind:show="showmsg" v-on:update:show="val => showmsg = val"></alert>
+	<button v-on:click="ontap">click</button>
+</div>
+<div id="app">
+	<switchbtn :result="result" @on-result-change="onResultChange"></switchbtn>
+	<input type="button" value="change" @click="change">
+</div>
+
+<script type="text/javascript">
+Vue.component('alert',{
+	methods:{
+		update:function(val){
+			console.log(12)
+			this.$emit('update:showmsg', {cont:'This is Ttitle!',ishow:false})
+		}
+	},
+	data:function(){
+		return {showmsg:this.show}
+	},
+	template:'<div class="msg-box" v-bind:class="{\'show\':showmsg.ishow}">\
+		<p v-on:click="update">{{showmsg.cont}}</p>\
+	</div>',
+	props:['show'],
+})
+new Vue({
+	el:'#v1',
+	data:{
+		phone:'18721178969',
+		psw:'111111',
+		showmsg:{
+			cont:'This is Ttitle!',
+			ishow: true
+		}
+	},
+	methods:{
+		ontap:function(){
+			this.showmsg.ishow=!this.showmsg.ishow
+			// console.log(this.showmsg)
+		},
+	},
+	watch:{
+		showmsg:{
+			handler:function(val){
+				console.log(val)
+			},
+			deep:true
+		}
+	}
+})
+Vue.component("switchbtn", {
+	template: "<div @click='change'>{{myResult?'开':'关'}}</div>",
+	props: ["result"],
+	data: function () {
+		return {
+			myResult: this.result/*创建props属性result的副本--myResult*/
+		};
+	},
+	watch: {
+		result(val) {
+			this.myResult = val;/*监听外部对props属性result的变更，并同步到组件内的data属性myResult中*/
+		},
+		myResult(val){
+			this.$emit("on-result-change",val);/*组件内对myResult变更后向外部发送事件通知*/
+		}
+	},
+	methods: {
+		change() {
+			this.myResult = !this.myResult;
+		}
+	}
+});
+
+new Vue({
+	el: "#app",
+	data: {
+		result: true
+	},
+	methods: {
+		change() {
+			this.result = !this.result;
+		},
+		onResultChange(val){
+			this.result=val;/*外层调用组件方注册变更方法，将组件内的数据变更，同步到组件外的数据状态中*/
+		}
+	}
+});
+</script>
+</body>
+</html>

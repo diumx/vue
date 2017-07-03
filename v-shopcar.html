@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vue-shopcar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+<script type="text/javascript" src="js/vue.js"></script>
+<style type="text/css">
+a{
+	text-decoration: none;
+}
+.setbox input, .setbox a{
+	display: block;width: 20px;height: 20px;text-align: center;
+}
+.setbox a{
+	border: 1px solid #f90;color: #f90;
+}
+.shoplist li{
+	border-bottom: 1px solid #ddd;padding: 10px 12px;
+}
+.total{
+	padding: 15px 12px;
+}
+input{
+	-webkit-appearance: none;
+}
+input[type="checkbox"]{
+	border: 1px solid #ddd;display: block;width: 20px;height: 20px;cursor: pointer;
+}
+.chkbox{
+	width: 50px;
+}
+input:checked{
+	background-color: #f90;
+}
+input:checked:after{
+	content: '';display: inline-block;border-left: 2px solid #fff;border-bottom: 2px solid #fff;width: 9px;height: 5px;
+	transform: rotate(-45deg);margin-left: 3px;
+}
+.radius4{
+	border-radius: 4px;
+}
+.imgbox{
+	max-width: 70px;min-width: 70px;
+}
+.imgbox img{
+	width: 50px;height: 50px;
+}
+.fcf90{
+	color: #f90;
+}
+.noshops{
+	height: 70px;
+}
+.pricebox{
+	min-width: 50px;padding: 0 20px;
+}
+.dets{
+	/*max-width: 220px;*/
+}
+</style>
+</head>
+<link rel="stylesheet" href="css/style.css">
+<body>
+<div id="v1">
+	<template>
+		<div class="shopcar width100">
+			<ul class="shoplist">
+				<li class="flex fxmiddle" v-for="(item,index) in items">
+					<div class="chkbox">
+						<input type="checkbox" class="radius4" v-on:click="selectit(item)" :checked="item.checked">
+					</div>
+					<div class="imgbox flex1">
+						<img :src="item.image" alt="">
+					</div>
+					<div class="dets flex1">
+						<p>{{item.name}}</p>
+						<p>{{item.intro}}</p>
+					</div>
+					<div class="pricebox flex1">
+						{{item.price|fmtmoney}}元
+					</div>
+					<div class="setbox flex flex1">
+						<a href="javascript:;" class="radius4" v-on:click="setNum(item,-1)">-</a>
+						<input type="text" disabled="disabled" v-model="item.number">
+						<a href="javascript:;" class="radius4" v-on:click="setNum(item,1)">+</a>
+					</div>
+					<div class="btnbox middle flex1">
+						<a href="javascript:;" v-on:click="deleteit(index)">删除</a>
+					</div>
+				</li>
+				<li class="flex center fcf90 noshops" v-if="!items.length">空空如也~</li>
+			</ul>
+			<div class="total flex">
+				<div class="flex1 fxmiddle" v-if="items.length">
+					<input type="checkbox" id="select-all" class="radius4 marrig5" v-on:click="selectAll" :checked="seltAll">
+					<label for="select-all">全选</label>
+				</div>
+				<div class="txright flex1">
+					Total:<span style="color: #f90;font-size: 24px;">{{total|fmtmoney}}</span> 元
+				</div>
+			</div>
+		</div>
+	</template>
+</div>
+
+
+<script type="text/javascript">
+new Vue({
+	el:'#v1',
+	data:{
+		items:[],
+		total:0,
+		seltAll:false
+	},
+	methods:{
+		selectit:function(item){
+			item.checked=!item.checked
+		},
+		selectAll:function(){
+			var that=this,tempBlo=!that.seltAll;
+			that.items.forEach(function(val, idx){
+				val.checked=tempBlo
+			})
+		},
+		setNum:function(item, tp){
+			if(tp<0){
+				if(item.number<2){return;}
+				item.number--;
+			}else{
+				item.number++;
+			}
+		},
+		deleteit:function(n){
+			this.items.splice(n,1)
+		}
+	},
+	filters:{
+		fmtmoney:function(n){
+			return n.toFixed(2)
+		}
+	},
+	watch:{
+		items:{
+			handler:function(val){
+				var clen=0, tempTotal=0;
+				this.items.forEach(function(val, idx){
+					if(val.checked){
+						clen++;
+						tempTotal+=val.price*val.number;
+					}
+				});
+				this.seltAll=clen==this.items.length;
+				this.total=tempTotal;
+			},
+			deep:true
+		}
+	},
+	mounted:function(){
+		this.items=this.items.concat([
+			{
+				pid:123123,
+				image:'http://112.65.132.238:8080/merchantapi/upload/course/4a16152c985d4e42a67d2ef0813f48bb_201703231101581.jpg',
+				name:'The old man and The Sea',
+				intro:'It is a book writed by Ernest Hemingway, 1809 .',
+				price:0.2,
+				number:1,
+				checked:false
+			},
+			{
+				pid:123123,
+				image:'http://112.65.132.238:8080/merchantapi/upload/course/4a16152c985d4e42a67d2ef0813f48bb_201703231101581.jpg',
+				name:'Vue Api',
+				intro:'It is a book writed by Ernest Hemingway, 1809 .',
+				price:0.1,
+				number:1,
+				checked:true
+			}
+		])
+	}
+})
+/*
+	this.$set('dataName','keyname','val')
+*/
+</script>
+</body>
+</html>

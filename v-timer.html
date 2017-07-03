@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vue-image</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="js/vue.js"></script>
+<style type="text/css">
+
+#v1{
+	margin: 0 auto;width: 100%;
+}
+.input{
+	border: 1px solid #ddd; border-radius: 4px; -webkit-transition: 0.3s; -moz-transition: 0.3s; transition: 0.3s; 
+	padding: 10px 15px;
+}
+.input:focus{
+	border-color: #189cfb;box-shadow: 0 0 6px #189cfb;
+}
+ul li{
+	padding: 10px;
+}
+.fxmiddle label{
+	width: 60px;
+}
+.button{
+	width: 90px;height: 32px;border: 1px solid #ddd;
+}
+.button:active{
+	border-color: #189cfb;background: #189cfb;color: #fff;
+}
+table{
+	/*width: 100%;*/
+}
+table td{
+	padding: 8px 15px;
+}
+</style>
+</head>
+<link rel="stylesheet" href="css/style.css">
+<body>
+<div id="v1">
+	<ul>
+		<li v-for="item in items">{{item}}</li>
+	</ul>
+	<ul>
+		<li v-for="item in items">{{item|cut}}</li>
+	</ul>
+</div>
+
+
+<script type="text/javascript">
+
+new Vue({
+	el:'#v1',
+	data:{
+		items:[
+			100,200,300,400,500
+		],
+		srvNum:10
+	},
+	methods:{
+		timer1:function(){
+			var that=this, temp=that.items,tempObj=[];
+			temp.forEach(function(item, index){
+				tempObj[index]=item-1
+			});
+			that.items=tempObj
+			setTimeout(function(){
+				that.timer1();
+			},1000)
+		},
+		timer2:function(){
+			var that=this;
+			setTimeout(function(){
+				that.srvNum+=1;
+				console.log(that.srvNum)
+				that.timer2()
+			},1000)
+		}
+	},
+	computed:{
+		
+	},
+	filters:{
+		cut:function(n){
+			// console.log(this)
+			return n-this.srvNum
+		}
+	},
+	mounted:function(){
+		this.timer1()
+	}
+})
+
+</script>
+</body>
+</html>

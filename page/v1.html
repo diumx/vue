@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>vue-for</title>
+</head>
+<body>
+	<!-- template 防止页面显示不正常 -->
+		<!-- <ul>
+			<template v-for="item in 10">
+				<li>{{ item }}</li>
+			</template>
+		</ul> -->
+	<div id="todo-list-example">
+		<input v-model="newTodoText" v-on:keyup.enter="addNewTodo" placeholder="Add a todo" >
+		<ul>
+			<todo-item v-for="(todo, index) in todos" v-bind:title="todo" v-bind:lineve="index" v-on:remove="removeit(index)">
+				
+			</todo-item>
+		</ul>
+
+	</div>
+
+	<div id="example-2">
+		<simple-counter></simple-counter>
+		<simple-counter></simple-counter>
+		<simple-counter></simple-counter>
+	</div>
+
+</body>
+<script type="text/javascript" src="../js/vue.js"></script>
+<script type="text/javascript">
+	Vue.component('todo-item', {
+		template: '\
+			<li v-bind:class="$emit(\'lineve\')">\
+				{{lineve}}-{{ title }}\
+				<button v-on:click="$emit(\'remove\')">X</button>\
+			</li>\
+		',
+		props: ['title','lineve'],
+		methods:{
+			removeit:function(index){
+				console.log(index)
+				// todos.splice(index, 1)
+			}
+		}
+	})
+	new Vue({
+		el: '#todo-list-example',
+		data: {
+			newTodoText: '',
+			todos: [
+			'Do the dishes',
+			'Take out the trash',
+			'Mow the lawn'
+			]
+		},
+		methods: {
+			addNewTodo: function () {
+				this.todos.push(this.newTodoText)
+				this.newTodoText = ''
+			},
+			removeit:function(index){
+				console.log(index)
+				this.todos.splice(index, 1)
+			}
+		}
+	})
+
+	Vue.component('simple-counter', {
+		template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+		data: function () {
+			return {counter: 0}
+		}
+	})
+	new Vue({
+		el: '#example-2',
+		data:{
+			counter: 0
+		}
+	})
+</script>
+</html>

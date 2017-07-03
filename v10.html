@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>vue-table</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<script type="text/javascript" src="js/vue.js"></script>
+<link rel="stylesheet" href="css/style.css">
+<style type="text/css">
+*{
+	margin: 0;padding: 0;font-family: Arial;
+}
+.table{
+	border: none;border-collapse: collapse;width: 100%;
+}
+.captr td{
+	padding: 15px 20px;background: #189cfb;border: 1px solid #189cfb;
+}
+.othtr td{
+	padding: 12px 20px;background: #fff;border: 1px solid #ddd;
+}
+.othtr td.noresult{
+	padding: 25px;text-align: center;
+}
+.lasttd a{
+	padding: 0 3px;
+}
+.inblock{
+	display: inline-block;
+}
+.formbox li{
+	padding: 8px 10px;
+}
+input[type="checkbox"],input[type="radio"]{
+
+}
+
+</style>
+</head>
+<body>
+<div id="main">
+	<tab-el v-bind:options="options"></tab-el>
+	<ul class="formbox">
+		<li>
+			<label>NAME: </label>
+			<input type="text" v-model="newps.name">
+		</li>
+		<li>
+			<label>AGE: </label>
+			<select name="" id="" v-model="newps.age">
+				<option :value="item" v-for="item in 15">{{item}}</option>
+			</select>
+		</li>
+		<li>
+			<label>SEX: </label>
+			<input type="radio" v-model="newps.sex" name="sex" id="male" value="male">
+			<label for="male">male</label>
+			<input type="radio" v-model="newps.sex" name="sex" id="female" value="female">
+			<label for="female">female</label>
+		</li>
+		<li>
+			<label>FAV: </label>
+			<section v-for="item in newps.fav" class="inblock">
+				<input type="checkbox"  v-model="item.key" v-bind:id="item.val">
+				<label v-bind:for="item.val">{{item.val}}</label>
+			</section>
+			
+		</li>
+		<li>
+			<label>Card: </label>
+			<section class="inblock">
+				<input type="checkbox"  v-model="paylist" id="QQ" value="QQ">
+				<label for="QQ">QQ</label>
+			</section>
+			<section class="inblock">
+				<input type="checkbox"  v-model="paylist" id="aliPay" value="aliPay">
+				<label for="aliPay">aliPay</label>
+			</section>
+			
+		</li>
+		<li>
+			<button v-on:click="submit">SUBMIT</button>
+		</li>
+	</ul>
+	<modal v-on:sure="delSure" v-bind:show.sync="hideCfm"></modal>
+</div>
+<script type="text/javascript" src="js/table.js"></script>
+<script type="text/javascript" src="js/template.js"></script>
+<script type="text/javascript">
+
+var v1=new Vue({
+	el:'#main',
+	data:{
+		paylist:[],
+		hideCfm:true,
+		newps:{
+			name:'',age:10,sex:'male',
+			fav:[
+				{key:false,val:'read'},{key:false,val:'listen'},{key:false,val:'sleep'}
+			]
+		},
+		options:{
+			data:[
+				{name:'lili',age:12,sex:'male',fav:'football'},
+				{name:'limi',age:12,sex:'male',fav:'football'},
+				{name:'lini',age:12,sex:'male',fav:'football'}
+			],
+			title:['NAME','AGE','SEX','FAVORITE','SET'],
+			empty:'',
+			set:[
+				{
+					name:'Delete',
+					fn:function(n){
+						// v1.options.data.splice(n,1)
+						v1.hideCfm=false
+					}
+				},
+				{
+					name:'Add',
+					fn:function(n){
+						console.log('add=fn')
+					}
+				},
+			],
+			backfn:function(){
+
+			}
+		},
+	},
+	methods:{
+		submit:function(){
+			var fav=this.getchk(),ps=this.newps;
+			var ps={
+				name:ps.name,age:ps.age,sex:ps.sex,fav:fav.toString()
+			};
+			this.options.data.push(ps)
+			this.newps={
+				name:'',age:10,sex:'male',
+				fav:[ {key:false,val:'read'},{key:false,val:'listen'},{key:false,val:'sleep'}]
+			}
+		},
+		getchk:function(){
+			return this.newps.fav.filter(item => item.key).map(item => item.val)
+		},
+		delSure:function(n){
+			v1.options.data.splice(n,1)
+		}
+	},
+	computed:{
+
+	},
+	filter:{
+		filterFav:function(val){
+			return val||'/'
+		}
+	}
+})
+var arr=[
+	{a:true,b:123},
+	{a:false,b:34},
+	{a:true,b:656},
+]
+var c=arr.filter(item=>item.a)
+console.log(c)
+</script>
+</body>
+</html>
